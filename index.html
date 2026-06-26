@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حصن المسلم الشامل | الأذكار اليومية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital@0;1&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #064e3b;
+            --primary-light: #0f766e;
+            --accent: #d97706;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-dark);
+            padding-bottom: 40px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-family: 'Amiri', serif;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #fef08a;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .category-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: -20px auto 30px;
+            padding: 0 20px;
+            max-width: 900px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            background-color: var(--card-bg);
+            border: 2px solid transparent;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--primary);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+
+        .category-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px -2px rgba(0,0,0,0.1);
+        }
+
+        .category-btn.active {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .main-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .azkar-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .zikr-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border-right: 6px solid var(--primary);
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .zikr-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        .zikr-card.completed {
+            border-right-color: #cbd5e1;
+            opacity: 0.6;
+        }
+
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            font-size: 1.6rem;
+            line-height: 2.3rem;
+            margin-bottom: 12px;
+            color: #0f172a;
+            text-align: justify;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 15px;
+        }
+
+        .source {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .counter-badge {
+            background-color: #f1f5f9;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 8px 20px;
+            border-radius: 30px;
+            transition: all 0.1s ease;
+        }
+
+        .zikr-card:active .counter-badge {
+            transform: scale(0.9);
+        }
+
+        .completed .counter-badge {
+            background-color: #e2e8f0;
+            color: #94a3b8;
+        }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 2rem; }
+            .arabic-text { font-size: 1.4rem; }
+            .category-btn { width: 45%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>حصن المسلم الشامل</h1>
+        <p>الْأَذْكَارُ الْيَوْمِيَّةُ وَالْأَدْعِيَةُ الْمُسْتَجَابَةُ</p>
+    </header>
+
+    <div class="category-container">
+        <button class="category-btn active" onclick="switchCategory('morning')">أذكار الصباح</button>
+        <button class="category-btn" onclick="switchCategory('evening')">أذكار المساء</button>
+        <button class="category-btn" onclick="switchCategory('sleeping')">أذكار النوم</button>
+        <button class="category-btn" onclick="switchCategory('after_prayer')">بعد الصلاة</button>
+        <button class="category-btn" onclick="switchCategory('tasbeeh')">تسابيح واستغفار</button>
+    </div>
+
+    <main class="main-content">
+        <div id="azkar-list" class="azkar-list">
+            <!-- سيتم تحميل الأذكار هنا تلقائياً -->
+        </div>
+    </main>
+
+    <script>
+        // قاعدة بيانات الأذكار الشاملة
+        const azkarData = {
+            morning: [
+                { id: 'm1', arabic: "أَعُوذُ بِاللهِ مِنَ الشَّيْطَانِ الرَّجِيمِ: اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ...", count: 1, source: "آية الكرسي - من قالها حين يصبح أجير من الجن حتى يمسي" },
+                { id: 'm2', arabic: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ: قُلْ هُوَ اللَّهُ أَحَدٌ * اللَّهُ الصَّمَدُ * لَمْ يَلِدْ وَلَمْ يُولَدْ * وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ.", count: 3, source: "سورة الإخلاص - تكفيه من كل شيء" },
+                { id: 'm3', arabic: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ: قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ * مِن شَرِّ مَا خَلَقَ * وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ * وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ * وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ.", count: 3, source: "سورة الفلق - تكفيه من كل شيء" },
+                { id: 'm4', arabic: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ: قُلْ أَعُوذُ بِرَبِّ النَّاسِ * مَلِكِ النَّاسِ * إِلَٰهِ النَّاسِ * مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ * الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ * مِنَ الْجِنَّةِ وَالنَّاسِ.", count: 3, source: "سورة الناس - تكفيه من كل شيء" },
+                { id: 'm5', arabic: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا الْيَوْمِ وَخَيْرَ مَا بَعْدَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا الْيَوْمِ وَشرِّ مَا بَعْدَهُ.", count: 1, source: "صحيح مسلم" },
+                { id: 'm6', arabic: "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ.", count: 1, source: "سيد الاستغفار - من قالها موقناً بها ومات دخل الجنة" },
+                { id: 'm7', arabic: "اللَّهُمَّ إِنِّي أَصْبَحْتُ أُشْهِدُكَ وَأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلَائِكَتَكَ وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ وَحْدَكَ لَا شَرِيكَ لَكَ، وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ.", count: 4, source: "من قالها أعتقه الله من النار" },
+                { id: 'm8', arabic: "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ.", count: 3, source: "لم يضره شيء في ذلك اليوم" },
+                { id: 'm9', arabic: "يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ أَصْلِحْ لِي شَأْنِي كُلَّهُ وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ.", count: 1, source: "الحاكم" },
+                { id: 'm10', arabic: "حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبِّ الْعَرْشِ الْعَظِيمِ.", count: 7, source: "كفاه الله ما أهمه من أمر الدنيا والآخرة" }
+            ],
+            evening: [
+                { id: 'e1', arabic: "أَعُوذُ بِاللهِ مِنَ الشَّيْطَانِ الرَّجِيمِ: اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ...", count: 1, source: "آية الكرسي - من قالها حين يمسي أجير من الجن حتى يصبح" },
+                { id: 'e2', arabic: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.", count: 1, source: "صحيح مسلم" },
+                { id: 'e3', arabic: "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ...", count: 1, source: "سيد الاستغفار" },
+                { id: 'e4', arabic: "أَعُوذُ بِكَلِمَاتِ اللهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ.", count: 3, source: "من قالها لم تضره لدغة حية أو عقرب في تلك الليلة" },
+                { id: 'e5', arabic: "اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ الْمَصِيرُ.", count: 1, source: "الترمذي" },
+                { id: 'e6', arabic: "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ.", count: 3, source: "الترمذي وأبو داود" }
+            ],
+            sleeping: [
+                { id: 's1', arabic: "بِاسْمِكَ رَبِّي وَضَعْتُ جَنْبِي، وَبِكَ أَرْفَعُهُ، فَإِنْ أَمْسَكْتَ نَفْسِي فَارْحَمْهَا، وَإِنْ أَرْسَلْتَهَا فَاحْفَظْهَا بِمَا تَحْفَظُ بِهِ عِبَادَكَ الصَّالِحِينَ.", count: 1, source: "البخاري ومسلم" },
+                { id: 's2', arabic: "اللَّهُمَّ خَلَقْتَ نَفْسِي وَأَنْتَ تَوفَّاهَا، لَكَ مَمَاتُهَا وَمَحْيَاهَا، إِنْ أَحْيَيْتَهَا فَاحْفَظْهَا، وَإِنْ أَمَتَّهَا فَاغْفِرْ لَهَا.", count: 1, source: "صحيح مسلم" },
+                { id: 's3', arabic: "اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ.", count: 3, source: "يُقال عند وضع اليد اليمنى تحت الخد عند النوم" },
+                { id: 's4', arabic: "بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا.", count: 1, source: "صحيح البخاري" }
+            ],
+            after_prayer: [
+                { id: 'p1', arabic: "أَسْتَغْفِرُ اللهَ، أَسْتَغْفِرُ اللهَ، أَسْتَغْفِرُ اللهَ. اللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ، تَبَارَكْتَ ذَا الْجَلَالِ وَالْإِكْرَامِ.", count: 1, source: "صحيح مسلم - يُقال فور التسليم من الصلاة" },
+                { id: 'p2', arabic: "لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، اللَّهُمَّ لَا مَانِعَ لِمَا أَعْطَيْتَ، وَلَا مُعْطِيَ لِمَا مَنَعْتَ، وَلَا يَنْفَعُ ذَا الْجَدِّ مِنْكَ الْجَدُّ.", count: 1, source: "البخاري ومسلم" },
+                { id: 'p3', arabic: "سُبْحَانَ اللهِ", count: 33, source: "من سبح وحمد وكبر 33 وختم بالمائة غفرت خطاياه وإن كانت مثل زبد البحر" },
+                { id: 'p4', arabic: "الْحَمْدُ لِلَّهِ", count: 33, source: "أذكار الصلاة" },
+                { id: 'p5', arabic: "اللهُ أَكْبَرُ", count: 33, source: "أذكار الصلاة" },
+                { id: 'p6', arabic: "لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.", count: 1, source: "تمام المائة بعد التسبيح والتحميد والتكبير" }
+            ],
+            tasbeeh: [
+                { id: 't1', arabic: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ.", count: 100, source: "حُطَّتْ خَطَايَاهُ وَإِنْ كَانَتْ مِثْلَ زَبَدِ الْبَحْرِ" },
+                { id: 't2', arabic: "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ.", count: 100, source: "مائة مرة في اليوم" },
+                { id: 't3', arabic: "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ.", count: 100, source: "كنز من كنوز الجنة" },
+                { id: 't4', arabic: "اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ.", count: 100, source: "من صلى عليّ حين يصبح وحين يمسي أدركته شفاعتي" }
+            ]
+        };
+
+        let activeCategory = 'morning';
+        let currentCounts = {};
+
+        function initCategoryCounts(cat) {
+            azkarData[cat].forEach(item => {
+                if (currentCounts[item.id] === undefined) {
+                    currentCounts[item.id] = item.count;
+                }
+            });
+        }
+
+        // تحويل الأرقام إلى كلمات عربية عند الحاجة
+        function getArabicNumberText(num) {
+            if (num === 1) return "مرة واحدة";
+            if (num === 2) return "مرتين";
+            if (num === 3) return "ثلاث مرات";
+            return num + " مرات";
+        }
+
+        function renderAzkar() {
+            const listContainer = document.getElementById('azkar-list');
+            listContainer.innerHTML = '';
+            initCategoryCounts(activeCategory);
+
+            azkarData[activeCategory].forEach(item => {
+                const remaining = currentCounts[item.id];
+                const isDone = remaining === 0;
+
+                const card = document.createElement('div');
+                card.className = `zikr-card ${isDone ? 'completed' : ''}`;
+                card.onclick = () => handleCardClick(item.id);
+
+                // تحديد النص اللي هيظهر على العداد
+                let badgeText = '';
+                if (isDone) {
+                    badgeText = '✓ تم';
+                } else {
+                    if (remaining === 1) {
+                        badgeText = 'المتبقي: واحدة';
+                    } else if (remaining === 2) {
+                        badgeText = 'المتبقي: اثنان';
+                    } else {
+                        badgeText = 'المتبقي: ' + remaining;
+                    }
+                }
+
+                card.innerHTML = `
+                    <div class="arabic-text">${item.arabic}</div>
+                    <div class="card-footer">
+                        <span class="source">${item.source}</span>
+                        <span class="counter-badge">${badgeText}</span>
+                    </div>
+                `;
+                listContainer.appendChild(card);
+            });
+        }
+
+        function handleCardClick(id) {
+            if (currentCounts[id] > 0) {
+                currentCounts[id]--;
+                renderAzkar();
+            }
+        }
+
+        function switchCategory(category) {
+            activeCategory = category;
+            
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // تحديد الزر اللي تم الضغط عليه لتلوينه
+            event.target.classList.add('active');
+            
+            renderAzkar();
+        }
+
+        // تشغيل التطبيق لأول مرة على أذكار الصباح
+        renderAzkar();
+    </script>
+</body>
+  </html>
